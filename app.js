@@ -1,8 +1,11 @@
 var express = require("express");
 var app = express();
+var methodOverride = require("method-override")
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/yelp_camp");
+//this is for put and delete
+app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
@@ -58,11 +61,41 @@ app.get("/campgrounds/:id", function(req, res){
       res.render("show.ejs",{campground: camp});
     } 
    });
-   
 });
 
+app.put("/campgrounds/:id", function(req, res){
+  var name = req.body.name;
+  var image = req.body.image;
+  var desc = req.body.description;
+  var editCampground = {name: name, image: image, description: desc};
+  Campground.findByIdAndUpdate(req.params.id, editCampground, function(e, camp){
+    if(e){
+      console.log("error load data"+e);
+    } else {
+      console.log("this is new? "+camp);
+      res.redirect("/campgrounds/"+req.params.id);
+    } 
+  });
+});
+
+app.delete("/campgrounds/:id", function(req, res){
+  // res.send("this is delete");
+  Campground.findByIdAndRemove(req.params.id,function(e){
+    if(e){
+      console.log("error load data"+e);
+    } else {
+      res.redirect("/campgrounds");
+    } 
+  });
+});
 app.get("/campgrounds/:id/edit", function(req,res){
-  res.render("edit.ejs");
+   Campground.findById(req.params.id, function(e, camp){
+    if(e){
+      console.log("error load data"+e);
+    } else {
+      res.render("edit.ejs",{campground: camp});
+    } 
+   });
 });
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
