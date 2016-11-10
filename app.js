@@ -10,9 +10,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 var campSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
+  name: String,
+  image: String,
+  description: String
 });
 
 var Campground = mongoose.model("Cat",campSchema);//create "table"
@@ -22,30 +22,30 @@ app.get("/", function(req, res){
 });
 
 app.get("/campgrounds", function(req, res){
-    Campground.find({}, function(e, campgrounds){
-        if(e){
-            console.log("error: "+e);
-        } else {
-            res.render("campgrounds",{campgrounds:campgrounds});
-        }
-    });
+  Campground.find({}, function(e, campgrounds){
+    if(e){
+      console.log("error: "+e);
+    } else {
+      res.render("campgrounds",{campgrounds:campgrounds});
+    }
+  });
 });
 
 app.post("/campgrounds", function(req, res){
-    // get data from form and add to campgrounds array
-    var name = req.body.name;
-    var image = req.body.image;
-    var desc = req.body.description;
-    var newCampground = {name: name, image: image, description: desc};
-    Campground.create(newCampground,function(e,camp){
-        if(e){
-            console.log("error when store data"+ e);
-        } else {
-            console.log(camp);
-        }
-    })
-    //redirect back to campgrounds page
-    res.redirect("/campgrounds");
+  // get data from form and add to campgrounds array
+  var name = req.body.name;
+  var image = req.body.image;
+  var desc = req.body.description;
+  var newCampground = {name: name, image: image, description: desc};
+  Campground.create(newCampground,function(e,camp){
+      if(e){
+          console.log("error when store data"+ e);
+      } else {
+          console.log(camp);
+      }
+  })
+  //redirect back to campgrounds page
+  res.redirect("/campgrounds");
 });
 
 app.get("/campgrounds/new", function(req, res){
