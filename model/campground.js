@@ -6,5 +6,5 @@ var campSchema = new mongoose.Schema({
   description: String
 });
 
-var Campground = mongoose.model("Cat",campSchema);//create "table"
+var Campground = mongoose.model("Camp",campSchema);//create "table"
 module.exports = Campground;

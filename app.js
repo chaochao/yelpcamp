@@ -4,6 +4,8 @@ var methodOverride = require("method-override")
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var Campground = require("./model/campground");
+var Comment = require("./model/Comment");
+var seedDB = require("./seeds");
 var expressSanitizer = require("express-sanitizer");
 mongoose.connect("mongodb://localhost/yelp_camp");
 mongoose.Promise = global.Promise;
@@ -13,14 +15,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.set("view engine", "ejs");
 
-// var campSchema = new mongoose.Schema({
-//   name: String,
-//   image: String,
-//   description: String
-// });
 
-// var Campground = mongoose.model("Cat",campSchema);//create "table"
-   
+
+seedDB();
 app.get("/", function(req, res){
     res.render("landing");
 });
@@ -31,7 +28,7 @@ app.get("/campgrounds", function(req, res){
       console.log("error: "+e);
       res.status(404).send();
     } else {
-      res.render("campgrounds",{campgrounds:campgrounds});
+      res.render("camp/campgrounds",{campgrounds:campgrounds});
     }
   });
 });
@@ -54,7 +51,7 @@ app.post("/campgrounds", function(req, res){
 });
 
 app.get("/campgrounds/new", function(req, res){
-   res.render("new.ejs"); 
+   res.render("camp/new.ejs"); 
 });
 
 app.get("/campgrounds/:id", function(req, res){
@@ -64,7 +61,7 @@ app.get("/campgrounds/:id", function(req, res){
       console.log("error load data: "+e);
       res.status(404).send();
     } else {
-      res.render("show.ejs",{campground: camp});
+      res.render("camp/show.ejs",{campground: camp});
     } 
    });
 });
@@ -91,7 +88,7 @@ app.get("/campgrounds/:id/edit", function(req,res){
       console.log("error load data"+e);
       res.status(404).send();
     } else {
-      res.render("edit.ejs",{campground: camp});
+      res.render("camp/edit.ejs",{campground: camp});
     } 
    });
 });

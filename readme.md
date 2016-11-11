@@ -1,5 +1,9 @@
 #YelpCamp
 
+##How to run this project
+* npm install
+* node app.js
+
 ##Initial Setup
 * Add Landing Page
 * Add Campgrounds Page that lists all campgrounds
