@@ -4,7 +4,9 @@
   "description": "YelpCamp v1",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch-css": "node-sass -w --include-path scss scss -o public/stylesheets",
+    "app": "node-sass -w --include-path scss scss -o public/stylesheets| nodemon app.js"
   },
   "author": "Colt Steele",
   "license": "ISC",
@@ -15,5 +17,9 @@
     "express-sanitizer": "^1.0.1",
     "method-override": "^2.3.6",
     "mongoose": "^4.6.6"
+  },
+  "devDependencies": {
+    "node-sass": "^3.11.2",
+    "nodemon": "^1.11.0"
   }
 }

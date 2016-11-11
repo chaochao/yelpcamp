@@ -1,4 +1,5 @@
 var express = require("express");
+var path = require('path');
 var app = express();
 var methodOverride = require("method-override")
 var bodyParser = require("body-parser");
@@ -14,6 +15,7 @@ app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.set("view engine", "ejs");
+
 app.use(express.static(__dirname+"/public"));
 
 seedDB();

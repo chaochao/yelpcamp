@@ -4,6 +4,8 @@
 * npm install
 * node app.js
 * you need mongodb set up, and run mongod
+* npm run watch-css to monitoring scss file
+* npm run app // this will run with nodemon
 
 ##Initial Setup
 * Add Landing Page
