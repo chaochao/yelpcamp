@@ -106,6 +106,36 @@ app.delete("/campgrounds/:id", function(req, res){
     } 
   });
 });
+app.get("/campgrounds/:id/comment/new", function(req,res){
+  Campground.findById(req.params.id, function(e, camp){
+    if(e){
+      console.log("error load data"+e);
+      res.status(404).send();
+    } else {
+      res.render("comment/new.ejs",{campground: camp});
+    } 
+   });
+});
+
+app.post("/campgrounds/:id/comment", function(req,res){
+  Campground.findById(req.params.id, function(e, camp){
+    if(e){
+      console.log("error load data"+e);
+      res.status(404).send();
+    } else {
+
+      Comment.create(req.body.comment,function(e,comment){
+        if(e){
+          console.log("errro when reate comment");
+        } else {
+          camp.comments.push(comment);
+          camp.save();
+          res.redirect("/campgrounds/"+camp.id);
+        }
+      });
+    } 
+   });
+});
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
    console.log("The YelpCamp Server Has Started!");

@@ -36,7 +36,7 @@ function seedDB() {
                 console.log(e);
               } else {
                 console.log("create comment");
-                camp.comments.push(comment); //not yet work we don't have comments in campground
+                camp.comments.push(comment);
                 camp.save();
               }
             });
