@@ -1,21 +1,49 @@
 <% include ../partials/header %>
-<h1><%=campground.name%></h1>
-
-<img src="<%= campground.image %>">
-
-<p><%= campground.description %></p>
-
-<%  campground.comments.forEach(function(comment){ %>
-  <li><%= comment.text %> - <%= comment.author %></li>
-<% }); %>
-<div>
-  <a href="/campgrounds/<%= campground.id %>/edit" class="btn btn-primary">edit</a>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <p class="lead"> YelpCamp</p>
+      <div class="list-group">
+        <li class="list-group-item active">info</li>
+        <li class="list-group-item">info</li>
+        <li class="list-group-item">info</li>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="thumbnail">        
+        <img class="img-responsive" src="<%= campground.image %>">
+        <div class="caption-full">
+          <h4 class="pull-right">price</h4>
+          <h4><a href=""><%=campground.name%></a></h4>
+          <p><%= campground.description %></p>
+        </div>
+      </div>      
+      <div class="well">
+        <div class="text-right">
+          <div>
+            <a href="/campgrounds/<%= campground.id %>/comment/new" class="btn btn-primary">comment</a>
+          </div>
+        </div>
+        <%  campground.comments.forEach(function(comment){ %>
+          <hr>
+          <div class="row">
+            <div class="col-md-12">
+              <%= comment.author %>
+              <span class="pull-right"> the date</span>
+              <p><%= comment.text %></p>
+            </div>
+          </div>
+        <% }); %>
+        </div>
+      <div>
+        <a href="/campgrounds/<%= campground.id %>/edit" class="btn btn-primary">edit</a>
+      </div>
+      <form method="POST" action="/campgrounds/<%= campground._id %>?_method=DELETE">
+        <button class="btn btn-primary" type="submit">Delete</button>
+      </form>
+    </div>
+  </div>
 </div>
 
-<div>
-  <a href="/campgrounds/<%= campground.id %>/comment/new" class="btn btn-primary">comment</a>
-</div>
-<form method="POST" action="/campgrounds/<%= campground._id %>?_method=DELETE">
-  <button class="btn btn-primary" type="submit">Delete</button>
-</form>
+
 <% include ../partials/footer %>

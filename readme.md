@@ -3,6 +3,7 @@
 ##How to run this project
 * npm install
 * node app.js
+* you need mongodb set up, and run mongod
 
 ##Initial Setup
 * Add Landing Page
