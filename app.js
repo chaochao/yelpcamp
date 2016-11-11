@@ -56,11 +56,13 @@ app.get("/campgrounds/new", function(req, res){
 
 app.get("/campgrounds/:id", function(req, res){
    // get data by id and then the call bcak send data
-   Campground.findById(req.params.id, function(e, camp){
+   // Campground.findById(req.params.id, function(e, camp){
+    Campground.findById(req.params.id).populate("comments").exec(function(e, camp){
     if(e){
       console.log("error load data: "+e);
       res.status(404).send();
     } else {
+      console.log(camp);
       res.render("camp/show.ejs",{campground: camp});
     } 
    });

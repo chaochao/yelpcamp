@@ -5,6 +5,9 @@
 
 <p><%= campground.description %></p>
 
+<%  campground.comments.forEach(function(comment){ %>
+  <li><%= comment.text %> - <%= comment.author %></li>
+<% }); %>
 <div>
   <a href="/campgrounds/<%= campground.id %>/edit" class="btn btn-primary">edit</a>
 </div>
