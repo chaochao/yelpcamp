@@ -3,11 +3,15 @@ var path = require('path');
 var app = express();
 var methodOverride = require("method-override")
 var bodyParser = require("body-parser");
+var expressSanitizer = require("express-sanitizer");
 var mongoose = require("mongoose");
+var passport = require("passport");
+var LocalStrategy = require("passport-local");
 var Campground = require("./model/campground");
 var Comment = require("./model/Comment");
+var User = require("./model/User");
 var seedDB = require("./seeds");
-var expressSanitizer = require("express-sanitizer");
+
 mongoose.connect("mongodb://localhost/yelp_camp");
 mongoose.Promise = global.Promise;
 //this is for put and delete
@@ -19,8 +23,26 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname+"/public"));
 
 seedDB();
+//PASSPORT CONFIG
+app.use(require("express-session")({
+  secret:"chao develop",
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+// pass value to all page
+app.use(function(req, res, next){
+  res.locals.currentUser = req.user;
+  next(); // do not forget!
+});
+
+
 app.get("/", function(req, res){
-    res.render("landing");
+  res.render("landing");
 });
 
 app.get("/campgrounds", function(req, res){
@@ -52,7 +74,7 @@ app.post("/campgrounds", function(req, res){
 });
 
 app.get("/campgrounds/new", function(req, res){
-   res.render("camp/new.ejs"); 
+   res.render("camp/new"); 
 });
 
 app.get("/campgrounds/:id", function(req, res){
@@ -63,8 +85,7 @@ app.get("/campgrounds/:id", function(req, res){
       console.log("error load data: "+e);
       res.status(404).send();
     } else {
-      console.log(camp);
-      res.render("camp/show.ejs",{campground: camp});
+      res.render("camp/show",{campground: camp});
     } 
    });
 });
@@ -91,7 +112,7 @@ app.get("/campgrounds/:id/edit", function(req,res){
       console.log("error load data"+e);
       res.status(404).send();
     } else {
-      res.render("camp/edit.ejs",{campground: camp});
+      res.render("camp/edit",{campground: camp});
     } 
    });
 });
@@ -107,18 +128,18 @@ app.delete("/campgrounds/:id", function(req, res){
     } 
   });
 });
-app.get("/campgrounds/:id/comment/new", function(req,res){
+app.get("/campgrounds/:id/comment/new", isLoggedIn, function(req,res){
   Campground.findById(req.params.id, function(e, camp){
     if(e){
       console.log("error load data"+e);
       res.status(404).send();
     } else {
-      res.render("comment/new.ejs",{campground: camp});
+      res.render("comment/new",{campground: camp});
     } 
    });
 });
 
-app.post("/campgrounds/:id/comment", function(req,res){
+app.post("/campgrounds/:id/comment", isLoggedIn, function(req,res){
   Campground.findById(req.params.id, function(e, camp){
     if(e){
       console.log("error load data"+e);
@@ -137,6 +158,53 @@ app.post("/campgrounds/:id/comment", function(req,res){
     } 
    });
 });
+
+//=========
+//AUTH RROUTES
+app.get("/register",function(req,res){{
+  res.render("register");
+}});
+
+app.post("/register",function(req,res){{
+  //TODO: some check here.
+
+  var newUser = new User({username: req.body.username});
+  User.register(newUser, req.body.password, function(err,user){
+    if(err){
+      console.log(err);
+      return res.render("register"); 
+    }
+    //log in the user
+    passport.authenticate("local")(req,res,function(){
+      res.redirect("/campgrounds")
+    });
+  });
+ 
+}});
+
+app.get("/login",function(req,res){{
+  res.render("login");
+}});
+
+app.post("/login",passport.authenticate("local", {
+  successRedirect:"/campgrounds",
+  failureRedirect:"/login"
+}), function(req,res){{
+  res.send("post login");
+}});
+
+app.get("/logout",function(req,res){
+  req.logout();
+  res.redirect("/campgrounds");
+});
+
+
+function isLoggedIn(req,res,next){
+  if(req.isAuthenticated()){
+    return next()
+  }
+  res.redirect("/login");
+}
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
    console.log("The YelpCamp Server Has Started!");
