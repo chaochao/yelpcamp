@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
-var Campground = require("./model/campground");
-var Comment = require("./model/Comment");
+var Campground = require("./models/campground");
+var Comment = require("./models/comment");
 data = [{
   name: "chao",
   image: "https://cdn.pixabay.com/photo/2014/03/29/09/17/cat-300572_1280.jpg",

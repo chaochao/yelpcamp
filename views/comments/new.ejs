@@ -3,7 +3,7 @@
     <div class="row">
         <h1 style="text-align: center">Create a New comment for <%= campground.name %></h1>
         <div style="width: 30%; margin: 25px auto;">
-            <form action="/campgrounds/<%= campground.id %>/comment" method="POST">
+            <form action="/campgrounds/<%= campground.id %>/comments" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="comment[author]" placeholder="author">
                 </div>
