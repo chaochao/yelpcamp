@@ -22,20 +22,12 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 });
 
 router.put("/:id", middleware.isLoggedIn, function(req, res) {
-  var name = req.body.name;
-  var image = req.body.image;
-  var desc = req.sanitize(req.body.description);
-  var editCampground = {
-    name: name,
-    image: image,
-    description: desc
-  };
-  Campground.findByIdAndUpdate(req.params.id, editCampground, function(e, camp) {
+  Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(e, camp) {
     if (e) {
       console.log("error load data" + e);
       res.status(404).send();
     } else {
-      console.log("this is new? " + camp);
+      // console.log("this is new? " + camp);
       res.redirect("/campgrounds/" + req.params.id);
     }
   });

@@ -14,10 +14,16 @@
         <img class="img-responsive" src="<%= campground.image %>">
         <div class="caption-full">
           <h4 class="pull-right">price</h4>
-          <h4><a href=""><%=campground.name%></a></h4>
-          <h6>submit by: <%=campground.author.username%></h6>
+          <h4><a href="#"><%=campground.name%></a></h4>
+          <h6>submit by: <a href="#"><%=campground.author.username%></a></h6>
           <p><%= campground.description %></p>
         </div>
+        <div>
+          <a href="/campgrounds/<%= campground.id %>/edit" class="btn btn-primary">edit</a>
+        </div>
+        <form method="POST" action="/campgrounds/<%= campground._id %>?_method=DELETE">
+          <button class="btn btn-primary" type="submit">Delete</button>
+        </form>
       </div>      
       <div class="well">
         <div class="text-right">
@@ -36,12 +42,6 @@
           </div>
         <% }); %>
         </div>
-      <div>
-        <a href="/campgrounds/<%= campground.id %>/edit" class="btn btn-primary">edit</a>
-      </div>
-      <form method="POST" action="/campgrounds/<%= campground._id %>?_method=DELETE">
-        <button class="btn btn-primary" type="submit">Delete</button>
-      </form>
     </div>
   </div>
 </div>
