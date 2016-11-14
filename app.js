@@ -27,7 +27,7 @@ app.set("view engine", "ejs");
 
 app.use(express.static(__dirname+"/public"));
 
-seedDB();
+// seedDB();
 //PASSPORT CONFIG
 app.use(require("express-session")({
   secret:"chao develop",
