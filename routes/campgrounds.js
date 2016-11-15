@@ -26,7 +26,6 @@ router.put("/:id", middleware.isCampgroundOwner, function(req, res) {
   Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(e, camp) {
     if (e) {
       console.log("error load data" + e);
-      // res.status(404).send();
       res.redirect("/campgrounds")
     } else {
       // console.log("this is new? " + camp);

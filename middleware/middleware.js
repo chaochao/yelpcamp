@@ -2,7 +2,6 @@ var Campground = require("../models/campground");
 
 module.exports = {
   isLoggedIn: function(req, res, next) {
-    console.log("this is isLoggedIn");
     if (req.isAuthenticated()) {
       return next();
     }
@@ -11,13 +10,12 @@ module.exports = {
 
   isCampgroundOwner: function(req, res, next) {
     if (req.isAuthenticated()) {
-      console.log("is auth");
       Campground.findById(req.params.id, function(e, campground) {
         if (e) {
           console.log("middleware is isSameAuthor err: " + e);
           res.redirect("back")
         } else {
-          if (req.user._id === campground.author.id) {
+          if (campground.author.id.equals(req.user._id)) {
             next();
           } else {
             res.redirect("back");
