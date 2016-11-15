@@ -15,12 +15,12 @@ module.exports = {
       Campground.findById(req.params.id, function(e, campground) {
         if (e) {
           console.log("middleware is isSameAuthor err: " + e);
-          res.redirect("/campgrounds")
+          res.redirect("back")
         } else {
           if (req.user._id === campground.author.id) {
             next();
           } else {
-            res.redirect("/campgrounds");
+            res.redirect("back");
           }
         }
       });
