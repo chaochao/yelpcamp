@@ -39,8 +39,14 @@
               <span class="pull-right"> the date</span>
               <p><%= comment.text %></p>
             </div>
-          </div>
-        <% }); %>
+             <% if (currentUser && campground.author.id.equals(currentUser._id)) { %>
+              <a href="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>/edit" class="btn btn-xs btn-warning">edit</a>
+              <form id="delete" method="POST" action="/campgrounds/<%= campground._id %>/comments/<%= comment.id %>?_method=DELETE">
+                <button class="btn btn-xs btn-danger" type="submit">Delete</button>
+              </form>
+            <% } %>
+              </div>
+            <% }); %>
         </div>
     </div>
   </div>
