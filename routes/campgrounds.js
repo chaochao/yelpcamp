@@ -21,14 +21,29 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
   res.render("campgrounds/new");
 });
 
-router.put("/:id", middleware.isLoggedIn, function(req, res) {
+
+router.put("/:id", middleware.isCampgroundOwner, function(req, res) {
   Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(e, camp) {
+    if (e) {
+      console.log("error load data" + e);
+      // res.status(404).send();
+      res.redirect("/campgrounds")
+    } else {
+      // console.log("this is new? " + camp);
+      res.redirect("/campgrounds/" + req.params.id);
+    }
+  });
+});
+
+// only authoer can remove the item
+router.delete("/:id", middleware.isCampgroundOwner, function(req, res) {
+  // res.send("this is delete");
+  Campground.findByIdAndRemove(req.params.id, function(e) {
     if (e) {
       console.log("error load data" + e);
       res.status(404).send();
     } else {
-      // console.log("this is new? " + camp);
-      res.redirect("/campgrounds/" + req.params.id);
+      res.redirect("/campgrounds");
     }
   });
 });
@@ -44,13 +59,14 @@ router.get("/:id", function(req, res) {
       // console.log(foundCampground)
       //render show template with that campground
       res.render("campgrounds/show", {
-        campground: foundCampground
+        campground: foundCampground,
+        currentUser: req.user
       });
     }
   });
 });
 
-router.get("/:id/edit", middleware.isLoggedIn, function(req, res) {
+router.get("/:id/edit", middleware.isCampgroundOwner, function(req, res) {
   Campground.findById(req.params.id, function(e, camp) {
     if (e) {
       console.log("error load data" + e);
@@ -59,18 +75,6 @@ router.get("/:id/edit", middleware.isLoggedIn, function(req, res) {
       res.render("campgrounds/edit", {
         campground: camp
       });
-    }
-  });
-});
-
-router.delete("/:id", middleware.isLoggedIn, function(req, res) {
-  // res.send("this is delete");
-  Campground.findByIdAndRemove(req.params.id, function(e) {
-    if (e) {
-      console.log("error load data" + e);
-      res.status(404).send();
-    } else {
-      res.redirect("/campgrounds");
     }
   });
 });
