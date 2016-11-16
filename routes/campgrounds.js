@@ -36,7 +36,6 @@ router.put("/:id", middleware.isCampgroundOwner, function(req, res) {
 
 // only authoer can remove the item
 router.delete("/:id", middleware.isCampgroundOwner, function(req, res) {
-  // res.send("this is delete");
   Campground.findByIdAndRemove(req.params.id, function(e) {
     if (e) {
       console.log("error load data" + e);
