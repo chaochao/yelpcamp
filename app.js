@@ -19,7 +19,8 @@ var commentRoutes = require("./routes/comments"),
   campgroundRoutes = require("./routes/campgrounds"),
   indexRoutes = require("./routes/index")
 var env = process.env.NODE_ENV || 'development';
-var mongodb_url = env === 'development' ? "mongodb://localhost/yelp_camp" : "something"
+var mlab ="mongodb://chaodev:abcd@ds155727.mlab.com:55727/yelpcamp"
+var mongodb_url = env === 'development' ? "mongodb://localhost/yelp_camp" : mlab
 mongoose.connect(mongodb_url);
 mongoose.Promise = global.Promise;
 //this is for put and delete
