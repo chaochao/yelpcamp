@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
     "watch-css": "node-sass -w --include-path scss scss -o public/stylesheets",
     "app": "node-sass -w --include-path scss scss -o public/stylesheets| nodemon app.js"
   },
