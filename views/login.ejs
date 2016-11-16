@@ -1,4 +1,10 @@
 <% include ./partials/header %>
+
+<% if( message && message.toString() !== ""){ %>
+  <div class="alert alert-danger" role="alert">
+    <strong><%= message %></strong>
+  </div>  
+<% } %>
 <h1>Log in</h1>
 <div calss="container">
   <form action="/login" method="POST">

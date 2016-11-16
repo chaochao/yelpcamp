@@ -7,6 +7,8 @@ var expressSanitizer = require("express-sanitizer");
 var mongoose = require("mongoose");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
+var flash = require("connect-flash");
+
 var Campground = require("./models/campground");
 var Comment = require("./models/comment");
 var User = require("./models/user");
@@ -21,6 +23,7 @@ mongoose.connect("mongodb://localhost/yelp_camp");
 mongoose.Promise = global.Promise;
 //this is for put and delete
 app.use(methodOverride('_method'))
+app.use(flash());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.set("view engine", "ejs");
@@ -41,6 +44,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 // pass value to all page
 app.use(function(req, res, next){
+  //all page will have currentUser when rendered
   res.locals.currentUser = req.user;
   next(); // do not forget!
 });

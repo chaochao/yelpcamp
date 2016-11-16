@@ -1,4 +1,9 @@
 <% include ./partials/header %>
+<% if( message.toString() !== ""){ %>
+  <div class="alert alert-danger" role="alert">
+    <strong><%= message %></strong>
+  </div>  
+<% } %>
 <h1>Welcome My Friend</h1>
 <div calss="container">
   <form action="/register" method="POST">

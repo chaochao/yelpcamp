@@ -6,6 +6,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     }
+    req.flash("error", "Please Login First!");
     res.redirect("/login");
   },
 
@@ -14,16 +15,19 @@ module.exports = {
       Campground.findById(req.params.id, function(e, campground) {
         if (e) {
           console.log("middleware is isCampgroundOwner err: " + e);
-          res.redirect("back")
+          req.flash("error", "Something wrong when try to find the campground.");
+          res.redirect("/campgrounds/" + req.params.id);
         } else {
           if (campground.author.id.equals(req.user._id)) {
             next();
           } else {
-            res.redirect("back");
+            req.flash("error", "You don't have the permission!");
+            res.redirect("/campgrounds/" + req.params.id);
           }
         }
       });
     } else {
+      req.flash("error", "Please Login First!");
       res.redirect("/login");
     }
   },
@@ -38,12 +42,14 @@ module.exports = {
           if (comment.author.id.equals(req.user._id)){
             next();
           } else{
+            req.flash("error", "You don't have the permission!");
             res.redirect("back");
           }
         }
       });
     } else {
-      res.redirect("back");
+      req.flash("error", "Please Login First!");
+      res.redirect("/login");
     }
   }
 }

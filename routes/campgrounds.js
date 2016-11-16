@@ -10,7 +10,8 @@ router.get("/", function(req, res) {
       console.log(err);
     } else {
       res.render("campgrounds/index", {
-        campgrounds: allCampgrounds
+        campgrounds: allCampgrounds,
+        message: req.flash("error")
       });
     }
   });
@@ -21,6 +22,37 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
   res.render("campgrounds/new");
 });
 
+// SHOW - shows more info about one campground
+router.get("/:id", function(req, res) {
+  //find the campground with provided ID
+  Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground) {
+    if (err) {
+      console.log(err);
+      res.status(404).send();
+    } else {
+      // console.log(foundCampground)
+      //render show template with that campground
+      res.render("campgrounds/show", {
+        campground: foundCampground,
+        currentUser: req.user,
+        message: req.flash("error")
+      });
+    }
+  });
+});
+
+router.get("/:id/edit", middleware.isCampgroundOwner, function(req, res) {
+  Campground.findById(req.params.id, function(e, camp) {
+    if (e) {
+      console.log("error load data" + e);
+      res.status(404).send();
+    } else {
+      res.render("campgrounds/edit", {
+        campground: camp
+      });
+    }
+  });
+});
 
 router.put("/:id", middleware.isCampgroundOwner, function(req, res) {
   Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(e, camp) {
@@ -42,37 +74,6 @@ router.delete("/:id", middleware.isCampgroundOwner, function(req, res) {
       res.status(404).send();
     } else {
       res.redirect("/campgrounds");
-    }
-  });
-});
-
-// SHOW - shows more info about one campground
-router.get("/:id", function(req, res) {
-  //find the campground with provided ID
-  Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground) {
-    if (err) {
-      console.log(err);
-      res.status(404).send();
-    } else {
-      // console.log(foundCampground)
-      //render show template with that campground
-      res.render("campgrounds/show", {
-        campground: foundCampground,
-        currentUser: req.user
-      });
-    }
-  });
-});
-
-router.get("/:id/edit", middleware.isCampgroundOwner, function(req, res) {
-  Campground.findById(req.params.id, function(e, camp) {
-    if (e) {
-      console.log("error load data" + e);
-      res.status(404).send();
-    } else {
-      res.render("campgrounds/edit", {
-        campground: camp
-      });
     }
   });
 });
