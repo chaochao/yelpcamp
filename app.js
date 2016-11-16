@@ -15,25 +15,28 @@ var User = require("./models/user");
 var seedDB = require("./seeds");
 
 //requring routes
-var commentRoutes    = require("./routes/comments"),
-    campgroundRoutes = require("./routes/campgrounds"),
-    indexRoutes      = require("./routes/index")
-
-mongoose.connect("mongodb://localhost/yelp_camp");
+var commentRoutes = require("./routes/comments"),
+  campgroundRoutes = require("./routes/campgrounds"),
+  indexRoutes = require("./routes/index")
+var env = process.env.NODE_ENV || 'development';
+var mongodb_url = env === 'development' ? "mongodb://localhost/yelp_camp" : "something"
+mongoose.connect(mongodb_url);
 mongoose.Promise = global.Promise;
 //this is for put and delete
 app.use(methodOverride('_method'))
 app.use(flash());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(expressSanitizer());
 app.set("view engine", "ejs");
 
-app.use(express.static(__dirname+"/public"));
+app.use(express.static(__dirname + "/public"));
 
 // seedDB();
 //PASSPORT CONFIG
 app.use(require("express-session")({
-  secret:"chao develop",
+  secret: "chao develop",
   resave: false,
   saveUninitialized: false
 }));
@@ -43,7 +46,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 // pass value to all page
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   //all page will have currentUser when rendered
   res.locals.currentUser = req.user;
   next(); // do not forget!
@@ -58,7 +61,6 @@ app.use("/campgrounds/:id/comments", commentRoutes);
 
 
 
-
-app.listen(process.env.PORT || 3000, process.env.IP, function(){
-   console.log("The YelpCamp Server Has Started!");
+app.listen(process.env.PORT || 3000, process.env.IP, function() {
+  console.log("The YelpCamp Server Has Started!");
 });
