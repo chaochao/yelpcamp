@@ -17,7 +17,7 @@ var seedDB = require("./seeds");
 //requring routes
 var commentRoutes = require("./routes/comments"),
   campgroundRoutes = require("./routes/campgrounds"),
-  indexRoutes = require("./routes/index")
+  indexRoutes = require("./routes/index");
 var env = process.env.NODE_ENV || 'development';
 // this is not a good way case others will know your info
 var mongodb_url = env === 'development' ? "mongodb://localhost/yelp_camp" : process.env.databaseUrl
